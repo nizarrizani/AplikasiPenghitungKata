@@ -1,12 +1,22 @@
 
+import java.awt.Color;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author ASUS
@@ -18,7 +28,7 @@ public class PenghitungKataFrame extends javax.swing.JFrame {
      */
     public PenghitungKataFrame() {
         initComponents();
-        
+
         setupRealTimeCounter();
     }
 
@@ -41,6 +51,13 @@ public class PenghitungKataFrame extends javax.swing.JFrame {
         lblJumlahKata = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         lblJumlahKarakter = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        lblJumlahKalimat = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        lblJumlahParagraf = new javax.swing.JLabel();
+        txtCari = new javax.swing.JTextField();
+        btnCari = new javax.swing.JButton();
+        btnSimpan = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Aplikasi Penghitung Kata");
@@ -58,6 +75,7 @@ public class PenghitungKataFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -73,11 +91,12 @@ public class PenghitungKataFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanel1.add(jButton1, gridBagConstraints);
 
-        jPanel2.setLayout(new java.awt.GridLayout(2, 2, 2, 6));
+        jPanel2.setLayout(new java.awt.GridLayout(4, 2, 2, 6));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel1.setText("Kata :");
@@ -89,9 +108,53 @@ public class PenghitungKataFrame extends javax.swing.JFrame {
         jPanel2.add(jLabel3);
         jPanel2.add(lblJumlahKarakter);
 
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel2.setText("Kalimat :");
+        jPanel2.add(jLabel2);
+        jPanel2.add(lblJumlahKalimat);
+
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel4.setText("Paragraf :");
+        jPanel2.add(jLabel4);
+        jPanel2.add(lblJumlahParagraf);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(jPanel2, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel1.add(txtCari, gridBagConstraints);
+
+        btnCari.setText("Cari");
+        btnCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel1.add(btnCari, gridBagConstraints);
+
+        btnSimpan.setText("Simpan");
+        btnSimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSimpanActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
+        jPanel1.add(btnSimpan, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -101,6 +164,14 @@ public class PenghitungKataFrame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         hitungJumlah();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        cariTeks();
+    }//GEN-LAST:event_btnCariActionPerformed
+
+    private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+        simpanKeFile();
+    }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void setupRealTimeCounter() {
         // Menambahkan DocumentListener ke JTextArea
@@ -123,6 +194,112 @@ public class PenghitungKataFrame extends javax.swing.JFrame {
         });
     }
 
+    private void simpanKeFile() {
+        // Mengambil teks dari JTextArea
+        String teks = jTextArea1.getText().trim(); // Menggunakan trim() untuk menghapus spasi kosong di awal dan akhir
+
+        // Jika teks kosong, tampilkan pesan peringatan dan jangan lanjutkan
+        if (teks.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Teks kosong! Silakan masukkan teks sebelum menyimpan.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return; // Menghentikan eksekusi lebih lanjut jika teks kosong
+        }
+
+        // Mengambil hasil perhitungan
+        String jumlahKata = lblJumlahKata.getText();
+        String jumlahKarakter = lblJumlahKarakter.getText();
+        String jumlahKalimat = lblJumlahKalimat.getText();
+        String jumlahParagraf = lblJumlahParagraf.getText();
+
+        // Membuat teks yang akan disimpan ke file
+        String content = "Teks yang dimasukkan:\n" + teks + "\n\n"
+                + "Hasil Perhitungan:\n"
+                + "Jumlah Kata: " + jumlahKata + "\n"
+                + "Jumlah Karakter: " + jumlahKarakter + "\n"
+                + "Jumlah Kalimat: " + jumlahKalimat + "\n"
+                + "Jumlah Paragraf: " + jumlahParagraf + "\n";
+
+        // Menggunakan JFileChooser untuk memilih lokasi penyimpanan
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Simpan Teks dan Hasil Perhitungan");
+
+        // Menentukan filter file agar hanya file .txt yang ditampilkan
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt");
+        fileChooser.setFileFilter(filter);
+
+        // Mengubah folder default ke folder saat ini
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+
+        // Menentukan nama file default
+        fileChooser.setSelectedFile(new File("hasil_perhitungan.txt"));
+
+        // Menampilkan dialog untuk memilih lokasi penyimpanan
+        int userSelection = fileChooser.showSaveDialog(this);
+
+        // Jika pengguna memilih "Save"
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+
+            // Menambahkan ekstensi ".txt" jika belum ada
+            if (!fileToSave.getAbsolutePath().endsWith(".txt")) {
+                fileToSave = new File(fileToSave.getAbsolutePath() + ".txt");
+            }
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileToSave))) {
+                // Menulis teks dan hasil perhitungan ke file
+                writer.write(content);
+                writer.close();
+
+                // Menampilkan pesan sukses
+                JOptionPane.showMessageDialog(this, "File berhasil disimpan!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e) {
+                // Menampilkan pesan error jika terjadi kesalahan saat menulis file
+                JOptionPane.showMessageDialog(this, "Gagal menyimpan file!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void cariTeks() {
+        // Mengambil teks yang dimasukkan di txtCari
+        String teksCari = txtCari.getText();
+
+        // Mengambil teks dari JTextArea
+        String teks = jTextArea1.getText();
+
+        // Menghapus highlight sebelumnya
+        Highlighter highlighter = jTextArea1.getHighlighter();
+        highlighter.removeAllHighlights();
+
+        // Jika teks cari tidak kosong
+        if (!teksCari.isEmpty()) {
+            // Mencari posisi teks yang sesuai dengan input di txtCari
+            int pos = teks.indexOf(teksCari);
+
+            // Flag untuk mengecek apakah teks ditemukan
+            boolean ditemukan = false;
+
+            // Jika teks ditemukan
+            while (pos >= 0) {
+                try {
+                    // Menyorot teks yang ditemukan
+                    highlighter.addHighlight(pos, pos + teksCari.length(), new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW));
+                    ditemukan = true; // Teks ditemukan
+
+                    // Mencari teks berikutnya
+                    pos = teks.indexOf(teksCari, pos + 1);
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // Jika teks tidak ditemukan, tampilkan pesan error
+            if (!ditemukan) {
+                JOptionPane.showMessageDialog(this, "Teks yang dicari tidak ditemukan!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Masukkan teks yang ingin dicari!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
     private void hitungJumlah() {
         // Mengambil teks dari JTextArea
         String teks = jTextArea1.getText();
@@ -131,15 +308,22 @@ public class PenghitungKataFrame extends javax.swing.JFrame {
         int jumlahKarakter = teks.length();
 
         // Menghitung jumlah kata menggunakan regex
-        // Regex "\\b\\w+\\b" akan mencocokkan kata berdasarkan alfanumerik yang terpisah oleh spasi atau tanda baca
         String[] kataArray = teks.trim().split("\\s+");
-
-        // Jika kataArray hanya berisi string kosong, jumlah kata akan 0
         int jumlahKata = (kataArray.length == 1 && kataArray[0].isEmpty()) ? 0 : kataArray.length;
+
+        // Menghitung jumlah kalimat menggunakan regex (titik, tanya, seru)
+        String[] kalimatArray = teks.split("[.!?]+");
+        int jumlahKalimat = (kalimatArray.length == 1 && kalimatArray[0].isEmpty()) ? 0 : kalimatArray.length;
+
+        // Menghitung jumlah paragraf berdasarkan baris baru (newline)
+        String[] paragrafArray = teks.split("\n");
+        int jumlahParagraf = (paragrafArray.length == 1 && paragrafArray[0].isEmpty()) ? 0 : paragrafArray.length;
 
         // Menampilkan hasil di JLabel
         lblJumlahKata.setText(String.valueOf(jumlahKata));
         lblJumlahKarakter.setText(String.valueOf(jumlahKarakter));
+        lblJumlahKalimat.setText(String.valueOf(jumlahKalimat)); // Pastikan lblJumlahKalimat ada
+        lblJumlahParagraf.setText(String.valueOf(jumlahParagraf)); // Pastikan lblJumlahParagraf ada
     }
 
     /**
@@ -178,14 +362,21 @@ public class PenghitungKataFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCari;
+    private javax.swing.JButton btnSimpan;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JLabel lblJumlahKalimat;
     private javax.swing.JLabel lblJumlahKarakter;
     private javax.swing.JLabel lblJumlahKata;
+    private javax.swing.JLabel lblJumlahParagraf;
+    private javax.swing.JTextField txtCari;
     // End of variables declaration//GEN-END:variables
 }
